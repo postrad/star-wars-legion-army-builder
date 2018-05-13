@@ -8,7 +8,7 @@ import Unit from './components/Unit';
 import Grid from './components/Grid';
 import Button from './components/Button';
 
-const transformArmyName = name => name.replace(/\s+/g, '-');
+const transformArmyName = name => `stlab-${name.replace(/\s+/g, '-')}`;
 
 class App extends Component {
   constructor(props) {
@@ -159,16 +159,30 @@ class App extends Component {
   }
 
   saveToLocalStorage() {
-    const { troopers, armyName } = this.state;
+    const { commanders, troopers, heavy, support, specialForces, armyName } = this.state;
+    const armyData = {
+      commanders,
+      troopers,
+      heavy,
+      support,
+      specialForces
+    }
 
-    return localStorage.setItem(transformArmyName(armyName), JSON.stringify(troopers));
+    console.log('army data: ', armyData);
+
+    return localStorage.setItem(transformArmyName(armyName), JSON.stringify(armyData));
   }
 
   retrieveFromLocalStorage() {
-    const { armyName } = this.state;
+    const { commanders, troopers, heavy, support, specialForces, armyName } = this.state;
+    const savedArmyData = JSON.parse(localStorage.getItem(transformArmyName(armyName)));
 
     this.setState({
-      troopers: JSON.parse(localStorage.getItem(transformArmyName(armyName)))
+      commanders: savedArmyData.commanders,
+      troopers: savedArmyData.troopers,
+      heavy: savedArmyData.heavy,
+      support: savedArmyData.support,
+      specialForces: savedArmyData.specialForces
     })
   }
 
